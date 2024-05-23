@@ -7,7 +7,7 @@ class Splashscreen extends StatefulWidget {
   State<Splashscreen> createState() => _SplashscreenState();
 }
 
-class _SplashscreenState extends State <Splashscreen> {
+class _SplashscreenState extends State<Splashscreen> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
@@ -17,10 +17,10 @@ class _SplashscreenState extends State <Splashscreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text("Welcome"),
-            SizedBox(height: 20), // Tambahkan jarak antara teks dan gambar
-            ImageIcon(AssetImage("web/icons/differdent.jpg")),
+            SizedBox(height: 50), // Add space between text and image
+            ImageIcon(AssetImage("assets/icons/differdent.jpg")),
           ],
-          ),
+        ),
       ),
     );
   }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pkm_mobile/registration_form.dart';
+import 'dart:async';
 
 class Splashscreen extends StatefulWidget {
   const Splashscreen({super.key});
@@ -17,11 +19,21 @@ class _SplashscreenState extends State<Splashscreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text("Welcome"),
-            SizedBox(height: 50), // Add space between text and image
-            ImageIcon(AssetImage("assets/icons/differdent.jpg")),
+            Image(
+              image: AssetImage("assets/icons/differdent.jpg"),
+            ),
           ],
         ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    Timer(const Duration(seconds: 3), () {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => const RegistrationForm()));
+    }
+    );
+    super.initState();
   }
 }

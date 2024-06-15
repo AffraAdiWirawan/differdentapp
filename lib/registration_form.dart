@@ -14,10 +14,12 @@ class RegistrationForm extends StatefulWidget {
 class _RegistrationFormState extends State<RegistrationForm> {
   final _formKey = GlobalKey<FormState>();
 
-  String _name = '';
+  String _nik = '';
+  String _nama = '';
   String _email = '';
+  String _username = '';
   String _password = '';
-  String _gak = '';
+  String _cpassword = '';
 
   @override
   Widget build(BuildContext context) {
@@ -27,30 +29,39 @@ class _RegistrationFormState extends State<RegistrationForm> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Form(
+        child: SingleChildScrollView(
           key: _formKey,
           child: Column(
             children: <Widget>[
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Name'),
+                decoration: const InputDecoration(labelText: 'NIK'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your name';
+                    return 'Jangan Kosong';
                   }
                   return null;
                 },
                 onSaved: (value) {
-                  _name = value ?? '';
+                  _nik = value ?? '';
+                },
+              ),
+              TextFormField(
+                decoration: const InputDecoration(labelText: 'Nama Lengkap'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Jangan Kosong';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  _nama = value ?? '';
                 },
               ),
               TextFormField(
                 decoration: const InputDecoration(labelText: 'Email'),
-                keyboardType: TextInputType.emailAddress,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your email';
-                  } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                    return 'Please enter a valid email address';
+                    return 'Jangan Kosong';
                   }
                   return null;
                 },
@@ -59,13 +70,23 @@ class _RegistrationFormState extends State<RegistrationForm> {
                 },
               ),
               TextFormField(
+                decoration: const InputDecoration(labelText: 'Username'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Jangan Kosong';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  _username = value ?? '';
+                },
+              ),
+              TextFormField(
                 decoration: const InputDecoration(labelText: 'Password'),
                 obscureText: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your password';
-                  } else if (value.length < 6) {
-                    return 'Password must be at least 6 characters long';
+                    return 'Jangan Kosong';
                   }
                   return null;
                 },
@@ -74,9 +95,16 @@ class _RegistrationFormState extends State<RegistrationForm> {
                 },
               ),
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Gak tau kolom apa'),
+                decoration: const InputDecoration(labelText: 'Confirm Password'),
+                obscureText: true,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Jangan Kosong';
+                  }
+                  return null;
+                },
                 onSaved: (value) {
-                  _gak = value ?? '';
+                  _cpassword = value ?? '';
                 },
               ),
               const SizedBox(height: 20.0),

@@ -1,23 +1,41 @@
-
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:pkm_mobile/pages/login_page.dart';
 import '../utils/app_export.dart';
-class OpenScreen extends StatelessWidget { 
+
+class OpenScreen extends StatefulWidget {
   const OpenScreen({super.key});
+
+  @override
+  _OpenScreenState createState() => _OpenScreenState();
+}
+
+class _OpenScreenState extends State<OpenScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(seconds: 5), () {
+      Get.to(const LoginPage());
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: theme.colorScheme.onPrimaryContainer,
-        body: Container (
-          width: double.maxFinite,
-          padding: EdgeInsets.symmetric(
-            horizontal: 28.h,
-            vertical: 336.v,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [_buildHeaderRow(context)],
+    return GetMaterialApp(
+      home: SafeArea(
+        child: Scaffold(
+          backgroundColor: theme.colorScheme.onPrimaryContainer,
+          body: Container(
+            width: double.maxFinite,
+            padding: EdgeInsets.symmetric(
+              horizontal: 28.h,
+              vertical: 336.v,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [_buildHeaderRow(context)],
+            ),
           ),
         ),
       ),
@@ -27,19 +45,15 @@ class OpenScreen extends StatelessWidget {
 
 /// Section Widget
 Widget _buildHeaderRow(BuildContext context) {
-  return Expanded (
+  return Expanded(
     child: Container(
-      margin: EdgeInsets.only (bottom: 46.v),
+      margin: EdgeInsets.only(bottom: 46.v),
       padding: EdgeInsets.symmetric(horizontal: 8.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CustomImageView(
-            imagePath: ImageConstant.logodifferdent,
-            height: 76.v,
-            width: 78.h,
-          ),
-          SizedBox(width: 22. h),
+          Image.asset(ImageConstant.logodifferdent),
+          SizedBox(width: 22.h),
           RichText(
             text: TextSpan(
               children: [
@@ -50,7 +64,7 @@ Widget _buildHeaderRow(BuildContext context) {
                 TextSpan(
                   text: "DENT",
                   style: theme.textTheme.headlineLarge,
-                )
+                ),
               ],
             ),
             textAlign: TextAlign.left,
@@ -60,4 +74,3 @@ Widget _buildHeaderRow(BuildContext context) {
     ),
   );
 }
-      

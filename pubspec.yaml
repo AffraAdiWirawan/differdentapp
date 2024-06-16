@@ -39,6 +39,7 @@ dependencies:
   cached_network_image: ^3.3.1
   flutter_svg: ^2.0.10+1
   get: ^4.6.6
+  flutter_carousel_widget: ^2.2.0
 
 dev_dependencies:
   flutter_test:
@@ -65,7 +66,8 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets\icons\differdent.jpg
+    - assets/images/
+    - assets/icons/
 
  
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -90,6 +92,6 @@ flutter:
   #       - asset: fonts/TrajanPro.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
-  #
+  # #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

@@ -14,4 +14,6 @@ class ImageConstant {
   static String iconrumahsakit = '$iconPath/rumahsakiticon.png';
   static String chatai = '$iconPath/aiicon.png';
   static String pesanicon = '$iconPath/pesanicon.png';
+  static String usericon = '$iconPath/usericons.png';
+  static String banner1 = '$imagePath/banner1.png';
 }

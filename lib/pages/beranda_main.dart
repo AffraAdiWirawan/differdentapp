@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:get/get.dart';
+import 'package:pkm_mobile/pages/component/bottomnavbar%20.dart';
+import 'package:pkm_mobile/pages/konsultasi.dart';
 import 'package:pkm_mobile/utils/app_export.dart';
 import 'package:pkm_mobile/utils/image_constant.dart';
+import 'package:pkm_mobile/pages/calender.dart';
+import 'package:pkm_mobile/pages/chatai.dart';
+import 'package:pkm_mobile/pages/message.dart';
+import 'package:pkm_mobile/pages/setting.dart';
 
 class BerandaMain extends StatefulWidget {
   const BerandaMain({super.key});
@@ -17,8 +23,8 @@ class BerandaMainPage extends State<BerandaMain> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> items = [
+      Image.asset(ImageConstant.banner1),
       Image.asset(ImageConstant.logogoogle),
-      Image.asset(ImageConstant.logodifferdent),
       Image.asset(ImageConstant.logodifferdent),
     ];
 
@@ -56,7 +62,7 @@ class BerandaMainPage extends State<BerandaMain> {
             tooltip: 'Show Snackbar',
             onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('This is a snackbar')));
+                  const SnackBar(content: Text('Pengaturan akun')));
             },
           ),
         ],
@@ -65,119 +71,121 @@ class BerandaMainPage extends State<BerandaMain> {
         children: <Widget>[
           Container(
             alignment: Alignment.centerLeft,
-            child: const Text('NEWS'),
+            padding: const EdgeInsets.all(8.0),
+            child: const Text('NEWS', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
           ),
           FlutterCarousel(
             items: items,
             options: options,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Image.asset(ImageConstant.iconar),
-              const SizedBox(width: 20),
-              Image.asset(ImageConstant.iconkalender),
-              const SizedBox(width: 20),
-              Image.asset(ImageConstant.iconedukasi),
-              const SizedBox(width: 20),
-              Image.asset(ImageConstant.iconrumahsakit),
-            ],
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              verticalDirection: VerticalDirection.down,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Get.to('/');
+                  },
+                  child: 
+                    SizedBox(
+                      width: 80,
+                      child: Column(
+                        children: [
+                          Image.asset(ImageConstant.iconar),
+                          const Text('Augmented Reality', textAlign: TextAlign.center,)
+                        ],
+                      ),
+                    ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Get.to(CalendarScreen());
+                  },
+                  child: 
+                    SizedBox(
+                      width: 80,
+                      child: Column(
+                        children: [
+                          Image.asset(ImageConstant.iconkalender),
+                          const Text('Kalender', textAlign: TextAlign.center,)
+                        ],
+                      ),
+                    ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Get.to('/');
+                  },
+                  child: 
+                  SizedBox(
+                    width: 80,
+                    child: Column(
+                      children: [
+                      Image.asset(ImageConstant.iconedukasi),
+                        const Text('Edukasi', textAlign: TextAlign.center,)
+                      ],
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Get.to('/');
+                  },
+                  child: 
+                    SizedBox(
+                      width: 80,
+                      child: Column(
+                        children: [
+                          Image.asset(ImageConstant.iconrumahsakit),
+                          const Text('Rumah Sakit', textAlign: TextAlign.center,)
+                        ],
+                      ),
+                    ),
+                ),
+              ],
+            ),
           ),
-          Container(
-            alignment: Alignment.centerLeft,
-          )
+          Expanded(
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: 10,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    height: 100,
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 50,
+                            height: 50,
+                            child: 
+                              Image.asset(ImageConstant.usericon)
+                          ),
+                          Text('Nama Dokter $index', style: const TextStyle(fontSize: 14)),
+                          Text('Spesialis $index', style: const TextStyle(fontSize: 12)),
+                          ElevatedButton(
+                            onPressed: () {
+                                // Perform login action with _nummail and _pass
+                                Get.to(DoctorScreen());
+                            },
+                            child: const Text('Chat Sekarang'),
+                          ),
+                        ],
+                      ),
+                    )
+                  ),
+                );
+              },
+            ),
+          ),
         ],
       ),
-      bottomNavigationBar: Obx(() {
-        return BottomNavigationBar(
-          unselectedItemColor: Colors.grey[800],
-          selectedItemColor: Colors.blue[800],
-          currentIndex: bottomNavController.selectedIndex.value,
-          onTap: bottomNavController.onItemTapped,
-          items: [
-            BottomNavigationBarItem(
-              label: 'Home',
-              icon: const Icon(Icons.home),
-              backgroundColor: Colors.grey[300],
-            ),
-            BottomNavigationBarItem(
-              label: 'Calendar',
-              icon: const Icon(Icons.calendar_month_outlined),
-              backgroundColor: Colors.grey[300],
-            ),
-            BottomNavigationBarItem(
-              label: 'ChatAI',
-              icon: SizedBox(
-                width: 30,
-                height: 30,
-                child: Image.asset(ImageConstant.chatai),
-              ),
-              backgroundColor: Colors.grey[300],
-            ),
-            BottomNavigationBarItem(
-              label: 'Pesan',
-              icon: const Icon(Icons.message),
-              backgroundColor: Colors.grey[300],
-            ),
-            BottomNavigationBarItem(
-              label: 'Settings',
-              icon: const Icon(Icons.settings),
-              backgroundColor: Colors.grey[300],
-            ),
-          ],
-        );
-      }),
-    );
-  }
-}
-
-class HomeScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Home')),
-      body: const Center(child: Text('Home Screen')),
-    );
-  }
-}
-
-class CalendarScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Calendar')),
-      body: const Center(child: Text('Calendar Screen')),
-    );
-  }
-}
-
-class ChatAIScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('ChatAI')),
-      body: const Center(child: Text('ChatAI Screen')),
-    );
-  }
-}
-
-class MessageScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Message')),
-      body: const Center(child: Text('Message Screen')),
-    );
-  }
-}
-
-class SettingsScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
-      body: const Center(child: Text('Settings Screen')),
+      bottomNavigationBar: BottomNavBar(),
     );
   }
 }
@@ -189,7 +197,7 @@ class BottomNavController extends GetxController {
     selectedIndex.value = index;
     switch (index) {
       case 0:
-        Get.to(() => HomeScreen());
+        Get.offAll(() => const BerandaMain());
         break;
       case 1:
         Get.to(() => CalendarScreen());

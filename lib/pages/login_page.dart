@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pkm_mobile/pages/beranda_main.dart';
+import 'package:pkm_mobile/pages/forgetpass.dart';
+import 'package:pkm_mobile/pages/register.dart';
 import 'package:pkm_mobile/utils/app_export.dart';
 
 class LoginPage extends StatefulWidget {
@@ -78,8 +80,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        // Implementasi lupa password di sini
-                        print('Forget Password tapped');
+                        Get.to(forgetpassword());
                       },
                       child: Container(
                         alignment: Alignment.centerLeft,
@@ -106,19 +107,22 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     Container(
                       alignment: Alignment.centerLeft,
-                      child: RichText(
-                        text: TextSpan(
+                      child: Row(
                           children: [
-                            TextSpan(
-                              text: 'Tidak punya akun? ',
+                            Text(
+                              'Tidak punya akun? ',
                               style: CustomTextStyles.bodyMediumBlack900
                             ),
-                            TextSpan(
-                              text: "Daftar Sekarang",
-                              style: CustomTextStyles.bodyLargeSansationCyan400
+                            GestureDetector(
+                              onTap: () {
+                                Get.to(Register());
+                              },
+                              child: Text (
+                                "Daftar Sekarang",
+                                style: CustomTextStyles.bodyLargeSansationCyan400
+                              ),
                             )
                           ]
-                        ),
                       ),
                     ),
                     SizedBox(

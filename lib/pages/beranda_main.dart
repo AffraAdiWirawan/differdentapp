@@ -82,7 +82,7 @@ class BerandaMainPage extends State<BerandaMain> {
             padding: const EdgeInsets.symmetric(vertical: 20.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              verticalDirection: VerticalDirection.down,
+              verticalDirection: VerticalDirection.up,
               children: [
                 GestureDetector(
                   onTap: () {

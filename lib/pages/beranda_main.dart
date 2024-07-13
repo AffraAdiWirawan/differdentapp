@@ -9,6 +9,8 @@ import 'package:pkm_mobile/pages/calender.dart';
 import 'package:pkm_mobile/pages/chatai.dart';
 import 'package:pkm_mobile/pages/message.dart';
 import 'package:pkm_mobile/pages/setting.dart';
+import 'package:pkm_mobile/pages/edukasi.dart';
+import 'package:pkm_mobile/pages/rumahsakit.dart';
 
 class BerandaMain extends StatefulWidget {
   const BerandaMain({super.key});
@@ -116,7 +118,7 @@ class BerandaMainPage extends State<BerandaMain> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Get.to('/');
+                    Get.to(EdukasiScreen());
                   },
                   child: 
                   SizedBox(
@@ -131,7 +133,7 @@ class BerandaMainPage extends State<BerandaMain> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Get.to('/');
+                    Get.to(RumahsakitScreen());
                   },
                   child: 
                     SizedBox(
@@ -150,7 +152,7 @@ class BerandaMainPage extends State<BerandaMain> {
           Expanded(
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: 10,
+              itemCount: 4,
               itemBuilder: (context, index) {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -210,6 +212,15 @@ class BottomNavController extends GetxController {
         break;
       case 4:
         Get.to(() => SettingsScreen());
+        break;
+      case 5:
+        Get.to(() => EdukasiScreen());
+        break;
+      case 6:
+        Get.to(() => RumahsakitScreen());
+        break;
+      case 7:
+        Get.to(() =>  DoctorScreen());
         break;
     }
   }

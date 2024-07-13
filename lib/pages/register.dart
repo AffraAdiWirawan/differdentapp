@@ -115,7 +115,6 @@ class Register extends StatelessWidget {
           )
         ),
       ),
-      bottomNavigationBar: BottomNavBar(),
     );
   }
 }

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 
 class RumahsakitScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Rumah Sakit'),
+        title: const Text('Rumah Sakit', style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.blue,
+        centerTitle: true,
         automaticallyImplyLeading: true, // Menampilkan tombol kembali secara otomatis
       ),
       body: ListView(
@@ -16,15 +18,15 @@ class RumahsakitScreen extends StatelessWidget {
             'assets/images/images.jpeg', // Gambar rumah sakit (ganti dengan path gambar yang sesuai)
             'RS AMC Muhammadiyah Yogyakarta', // Nama rumah sakit
             'Senin - Sabtu: 09.00 - 19.00', // Jam buka
-            'Jl. HOS Cokroaminoto No.17B, Pakuncen, Wirobrajan, Kota Yogyakarta, Daerah Istimewa Yogyakarta 55253',
-            'https://maps.app.goo.gl/xvrkWKtvGUHASk2k9', // Alamat rumah sakit
+            'Jl. HOS Cokroaminoto No.17B, Pakuncen, Wirobrajan, Kota Yogyakarta, Daerah Istimewa Yogyakarta 55253', // Alamat rumah sakit
+            'https://maps.app.goo.gl/xvrkWKtvGUHASk2k9', // Link Google Maps
           ),
         ],
       ),
     );
   }
 
-  Widget _buildRumahSakitCard(String imagePath, String nama, String jamBuka, String alamat, String Maps) {
+  Widget _buildRumahSakitCard(String imagePath, String nama, String jamBuka, String alamat, String mapsUrl) {
     return Card(
       elevation: 4.0,
       shape: RoundedRectangleBorder(
@@ -90,10 +92,21 @@ class RumahsakitScreen extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text(
-                  Maps,
-                  style: TextStyle(
-                    fontSize: 16.0,
+                GestureDetector(
+                  onTap: () async {
+                    if (await canLaunch(mapsUrl)) {
+                      await launch(mapsUrl);
+                    } else {
+                      throw 'Could not launch $mapsUrl';
+                    }
+                  },
+                  child: Text(
+                    mapsUrl,
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.blue,
+                      decoration: TextDecoration.underline,
+                    ),
                   ),
                 ),
               ],

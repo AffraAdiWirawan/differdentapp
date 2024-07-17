@@ -25,9 +25,9 @@ class BerandaMainPage extends State<BerandaMain> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> items = [
+      Image.asset(ImageConstant.motivasi1),
+      Image.asset(ImageConstant.motivasi2),
       Image.asset(ImageConstant.banner1),
-      Image.asset(ImageConstant.logogoogle),
-      Image.asset(ImageConstant.logodifferdent),
     ];
 
     final CarouselOptions options = CarouselOptions(
@@ -96,7 +96,7 @@ class BerandaMainPage extends State<BerandaMain> {
                       child: Column(
                         children: [
                           Image.asset(ImageConstant.iconar),
-                          const Text('Augmented Reality', textAlign: TextAlign.center,)
+                          const Text('Augmented', textAlign: TextAlign.center,)
                         ],
                       ),
                     ),
@@ -141,7 +141,7 @@ class BerandaMainPage extends State<BerandaMain> {
                       child: Column(
                         children: [
                           Image.asset(ImageConstant.iconrumahsakit),
-                          const Text('Rumah Sakit', textAlign: TextAlign.center,)
+                          const Text('Rumah', textAlign: TextAlign.center,)
                         ],
                       ),
                     ),
@@ -149,37 +149,66 @@ class BerandaMainPage extends State<BerandaMain> {
               ],
             ),
           ),
-          Expanded(
+          Container(
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'Konsultasi Spesialis',
+             style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              decoration: TextDecoration.underline,
+            ),
+          ),
+        ),
+         Expanded(
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: 4,
               itemBuilder: (context, index) {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    height: 100,
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            width: 50,
-                            height: 50,
-                            child: 
-                              Image.asset(ImageConstant.usericon)
-                          ),
-                          Text('Nama Dokter $index', style: const TextStyle(fontSize: 14)),
-                          Text('Spesialis $index', style: const TextStyle(fontSize: 12)),
-                          ElevatedButton(
-                            onPressed: () {
-                                // Perform login action with _nummail and _pass
+                  child: Card(
+                    elevation: 4.0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: SizedBox(
+                      width: 160, // Mengubah lebar card dokter
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 50,
+                              height: 50,
+                              child: Image.asset(ImageConstant.usericon),
+                            ),
+                            SizedBox(height: 8.0),
+                            Text(
+                              'Nama Dokter $index',
+                              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(height: 4.0),
+                            Text(
+                              'Spesialis $index',
+                              style: const TextStyle(fontSize: 10),
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(height: 8.0),
+                            ElevatedButton(
+                              onPressed: () {
+                                // Navigasi ke layar dokter
                                 Get.to(DoctorScreen());
-                            },
-                            child: const Text('Chat Sekarang'),
-                          ),
-                        ],
+                              },
+                              child: const Text('Chat Sekarang', style: TextStyle(fontSize: 10)),
+                            ),
+                          ],
+                        ),
                       ),
-                    )
+                    ),
                   ),
                 );
               },

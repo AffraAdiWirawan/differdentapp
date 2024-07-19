@@ -81,7 +81,7 @@ class BerandaMainPage extends State<BerandaMain> {
             options: options,
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20.0),
+            padding: const EdgeInsets.symmetric(vertical: 15.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               verticalDirection: VerticalDirection.up,
@@ -151,11 +151,11 @@ class BerandaMainPage extends State<BerandaMain> {
           ),
           Container(
             alignment: Alignment.centerLeft,
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(2.0),
             child: Text(
               'Konsultasi Spesialis',
              style: TextStyle(
-              fontSize: 24,
+              fontSize: 20,
               fontWeight: FontWeight.bold,
               decoration: TextDecoration.underline,
             ),
@@ -164,10 +164,10 @@ class BerandaMainPage extends State<BerandaMain> {
          Expanded(
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: 4,
+              itemCount: 4,//Index
               itemBuilder: (context, index) {
                 return Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(4.0),
                   child: Card(
                     elevation: 4.0,
                     shape: RoundedRectangleBorder(
@@ -176,28 +176,28 @@ class BerandaMainPage extends State<BerandaMain> {
                     child: SizedBox(
                       width: 160, // Mengubah lebar card dokter
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(4.0),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             SizedBox(
-                              width: 50,
-                              height: 50,
+                              width: 40,
+                              height: 40,
                               child: Image.asset(ImageConstant.usericon),
                             ),
-                            SizedBox(height: 8.0),
+                            SizedBox(),
                             Text(
                               'Nama Dokter $index',
                               style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                               textAlign: TextAlign.center,
                             ),
-                            SizedBox(height: 4.0),
+                            SizedBox(),
                             Text(
                               'Spesialis $index',
                               style: const TextStyle(fontSize: 10),
                               textAlign: TextAlign.center,
                             ),
-                            SizedBox(height: 8.0),
+                            SizedBox(),
                             ElevatedButton(
                               onPressed: () {
                                 // Navigasi ke layar dokter

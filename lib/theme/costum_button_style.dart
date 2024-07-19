@@ -7,7 +7,7 @@ class CustomButtonStyles {
 static ButtonStyle get fillCyan => ElevatedButton.styleFrom(
   backgroundColor: appTheme.cyan400,
   shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(8.h),
+    borderRadius: BorderRadius.circular(2.h),
   ),
 );
 static ButtonStyle get fillCyanTL24 => ElevatedButton.styleFrom(

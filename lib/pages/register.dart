@@ -17,22 +17,30 @@ class _RegisterState extends State<Register> {
   Future<void> _register() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
+            // Prepare the data to be sent
+      final requestBody = jsonEncode(<String, String>{
+        'NIK': _NIK!,
+        'nama_lengkap': _nama_lengkap!,
+        'email': _email!,
+        'username': _username!,
+        'password': _password!,
+      });
 
+      // Print the request body for debugging
+      print('Request body: $requestBody');
+
+      // Make the HTTP POST request
       final response = await http.post(
-        Uri.parse('http://loginregister.masjidbaitulhikmah.com/register.php'),
+        Uri.parse('https://api.differentdentalumy.com/register.php'),
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: {
-          'NIK': _NIK!,
-          'namalengkap': _nama_lengkap!,
-          'email': _email!,
-          'username': _username!,
-          'password': _password!,
-        },
+        body: requestBody,
       );
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         final jsonData = jsonDecode(response.body);
         if (jsonData['success']) {
           // Register successful, navigate to login screen
@@ -51,6 +59,7 @@ class _RegisterState extends State<Register> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error occurred')),
         );
+        print(response.statusCode);
       }
     }
   }
@@ -92,7 +101,7 @@ class _RegisterState extends State<Register> {
                               return null;
                             },
                             onSaved: (value) {
-                              // Set value for NIK
+                              _NIK = value;
                             },
                           ),
                         ),
@@ -110,7 +119,7 @@ class _RegisterState extends State<Register> {
                               return null;
                             },
                             onSaved: (value) {
-                              // Set value for Nama Lengkap
+                              _nama_lengkap = value;
                             },
                           ),
                         ),
@@ -128,7 +137,7 @@ class _RegisterState extends State<Register> {
                               return null;
                             },
                             onSaved: (value) {
-                              // Set value for Email
+                              _email = value;
                             },
                           ),
                         ),

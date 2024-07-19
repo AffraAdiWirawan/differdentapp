@@ -43,6 +43,7 @@ dependencies:
   table_calendar: ^3.1.2
   url_launcher : ^6.3.0
   youtube_player_flutter: ^8.0.0
+  model_viewer_plus: ^1.7.2
   
 dev_dependencies:
   flutter_test:
@@ -71,6 +72,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/ar/tooth.glb
 
  
   # An image asset can refer to one or more resolution-specific "variants", see

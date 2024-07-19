@@ -17,7 +17,7 @@ class _RegisterState extends State<Register> {
   Future<void> _register() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-            // Prepare the data to be sent
+      // Prepare the data to be sent
       final requestBody = jsonEncode(<String, String>{
         'NIK': _NIK!,
         'nama_lengkap': _nama_lengkap!,
@@ -37,27 +37,38 @@ class _RegisterState extends State<Register> {
         },
         body: requestBody,
       );
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
+      print(response.statusCode);
+
+      final jsonData = jsonDecode(response.body);
+      print('Response data: $jsonData');
 
       if (response.statusCode == 201) {
-        final jsonData = jsonDecode(response.body);
-        if (jsonData['success']) {
-          // Register successful, navigate to login screen
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => LoginPage()),
-          );
-        } else {
-          // Register failed
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(jsonData['message'])),
-          );
-        }
+        // Show the dialog
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Registrasi Berhasil'),
+              content: Text('Akun berhasil dibuat'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close the dialog
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginPage()),
+                    );
+                  },
+                  child: Text('Kembali ke Login'),
+                ),
+              ],
+            );
+          },
+        );
       } else {
-        // Error occurred
+        // Show the message from the server in a SnackBar
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error occurred')),
+          SnackBar(content: Text(jsonData['message'] ?? 'Error occurred')),
         );
         print(response.statusCode);
       }
@@ -203,7 +214,6 @@ class _RegisterState extends State<Register> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavBar(),
     );
   }
 }

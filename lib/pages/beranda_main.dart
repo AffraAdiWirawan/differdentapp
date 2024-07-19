@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:get/get.dart';
+import 'package:pkm_mobile/pages/augmented.dart';
 import 'package:pkm_mobile/pages/component/bottomnavbar%20.dart';
 import 'package:pkm_mobile/pages/konsultasi.dart';
 import 'package:pkm_mobile/utils/app_export.dart';
@@ -88,7 +89,7 @@ class BerandaMainPage extends State<BerandaMain> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    Get.to('/');
+                    Get.to(Augmented());
                   },
                   child: 
                     SizedBox(

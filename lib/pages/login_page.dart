@@ -6,6 +6,7 @@ import 'package:pkm_mobile/pages/forgetpass.dart';
 import 'package:pkm_mobile/pages/register.dart';
 import 'package:pkm_mobile/utils/app_export.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -41,6 +42,12 @@ class _LoginPageState extends State<LoginPage> {
       );
       print(response.statusCode);
       if (response.statusCode == 201) {
+        final responseBody = jsonDecode(response.body);
+        
+        // Simpan data pengguna ke SharedPreferences
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('user', jsonEncode(responseBody['user']));
+
         // Navigate to BerandaMain on successful login
         Get.to(const BerandaMain());
       } else {

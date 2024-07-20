@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:get/get.dart';
@@ -12,16 +13,34 @@ import 'package:pkm_mobile/pages/message.dart';
 import 'package:pkm_mobile/pages/setting.dart';
 import 'package:pkm_mobile/pages/edukasi.dart';
 import 'package:pkm_mobile/pages/rumahsakit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BerandaMain extends StatefulWidget {
   const BerandaMain({super.key});
-
   @override
   State<BerandaMain> createState() => BerandaMainPage();
 }
 
 class BerandaMainPage extends State<BerandaMain> {
   final BottomNavController bottomNavController = Get.put(BottomNavController());
+  Map<String, dynamic>? user;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? userData = prefs.getString('user');
+    if (userData != null) {
+      setState(() {
+        user = jsonDecode(userData);
+        print('User data: $user');
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +49,7 @@ class BerandaMainPage extends State<BerandaMain> {
       Image.asset(ImageConstant.motivasi2),
       Image.asset(ImageConstant.banner1),
     ];
+    String username = user?['username'] ?? 'User';
 
     final CarouselOptions options = CarouselOptions(
       height: 200.0,
@@ -44,6 +64,7 @@ class BerandaMainPage extends State<BerandaMain> {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: RichText(
           text: TextSpan(
             children: [
@@ -155,7 +176,7 @@ class BerandaMainPage extends State<BerandaMain> {
             padding: const EdgeInsets.all(2.0),
             child: Text(
               'Konsultasi Spesialis',
-             style: TextStyle(
+              style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
               decoration: TextDecoration.underline,

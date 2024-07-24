@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pkm_mobile/pages/component/bottomnavbar%20.dart'; // Corrected import path
-import 'package:pkm_mobile/pages/login_page.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:pkm_mobile/pages/login_page.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -109,6 +108,9 @@ class _RegisterState extends State<Register> {
                               if (value == null || value.isEmpty) {
                                 return 'Masukan NIK';
                               }
+                              if (!RegExp(r'^\d+$').hasMatch(value)) {
+                                return 'NIK hanya boleh berupa angka';
+                              }
                               return null;
                             },
                             onSaved: (value) {
@@ -127,6 +129,9 @@ class _RegisterState extends State<Register> {
                               if (value == null || value.isEmpty) {
                                 return 'Masukan Nama Lengkap';
                               }
+                              if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(value)) {
+                                return 'Nama hanya boleh berupa huruf';
+                              }
                               return null;
                             },
                             onSaved: (value) {
@@ -144,6 +149,9 @@ class _RegisterState extends State<Register> {
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Masukan Email';
+                              }
+                              if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                                return 'Email tidak valid';
                               }
                               return null;
                             },

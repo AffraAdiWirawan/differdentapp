@@ -45,6 +45,13 @@ dependencies:
   youtube_player_flutter: ^8.0.0
   model_viewer_plus: ^1.7.2
   shared_preferences: ^2.2.3
+  dash_chat_2: ^0.0.21
+  chat_gpt_sdk: ^3.0.9 
+  flutter_dotenv: ^5.0.2
+  speech_to_text: ^6.1.1
+  http: ^0.13.5
+  flutter_tts: ^3.6.3
+  animate_do: ^3.0.2
   
 dev_dependencies:
   flutter_test:

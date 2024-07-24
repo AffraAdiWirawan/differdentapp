@@ -5,7 +5,12 @@ class ChatAIScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('ChatAI'),automaticallyImplyLeading: false,),
+      appBar: AppBar(title: const Text('ChatAI',
+      style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.blue,
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+        ),
       body: const Center(child: Text('ChatAI Screen')),
       bottomNavigationBar: BottomNavBar(),
     );

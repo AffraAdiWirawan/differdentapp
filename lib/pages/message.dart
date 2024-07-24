@@ -26,7 +26,6 @@ class _MessageScreenState extends State<MessageScreen> {
     if (userData != null) {
       setState(() {
         user = jsonDecode(userData);
-        print('User data: $user');
         chatItems = _fetchChatItems(user!['uid']);
       });
     }
@@ -35,13 +34,31 @@ class _MessageScreenState extends State<MessageScreen> {
   Future<List<ChatItem>> _fetchChatItems(String uid) async {
     final response = await http.get(Uri.parse('https://api.differentdentalumy.com/pesan.php?uid=$uid'));
 
-    print(response.statusCode);
-    print(response.body);
     if (response.statusCode == 200) {
       List<dynamic> data = jsonDecode(response.body);
-      return data.map((json) => ChatItem.fromJson(json)).toList();
+      
+      List<ChatItem> chatItems = [];
+      for (var item in data) {
+        // Fetch sender name for each chat item
+        final senderResponse = await http.get(Uri.parse('https://api.differentdentalumy.com/getuser.php?uid=${item['sender_uid']}'));
+        String senderName = 'Unknown';
+
+        if (senderResponse.statusCode == 200) {
+          var senderData = jsonDecode(senderResponse.body);
+          senderName = senderData['nama_lengkap'] ?? 'Unknown';
+        }
+
+        chatItems.add(ChatItem(
+          senderUid: item['sender_uid'], // Include sender_uid
+          fullName: senderName,
+          lastMessage: item['last_message'],
+          time: item['last_message_time'],
+          chatid: item['chat_id'],
+        ));
+      }
+      return chatItems;
     } else {
-      throw Exception('Failed to load chats');
+      throw Exception('Failed to load chat items');
     }
   }
 
@@ -49,7 +66,9 @@ class _MessageScreenState extends State<MessageScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Chat Konsultasi'),
+        title: const Text('Chat Konsultasi', style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.blue,
+        centerTitle: true,
         automaticallyImplyLeading: false,
       ),
       body: FutureBuilder<List<ChatItem>>(
@@ -71,17 +90,16 @@ class _MessageScreenState extends State<MessageScreen> {
               final chatItem = chatItems[index];
               return ListTile(
                 leading: CircleAvatar(
-                  // Placeholder or default image if you have one
                   backgroundImage: AssetImage('assets/images/default_avatar.png'), // Update accordingly
                 ),
-                title: Text(chatItem.name),
+                title: Text(chatItem.fullName),
                 subtitle: Text(chatItem.lastMessage),
                 trailing: Text(chatItem.time),
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ChatDetailScreen(name: chatItem.name),
+                      builder: (context) => ChatDetailScreen(pengirim: chatItem.senderUid, chatroom: chatItem.chatid),
                     ),
                   );
                 },
@@ -96,21 +114,27 @@ class _MessageScreenState extends State<MessageScreen> {
 }
 
 class ChatItem {
-  final String name;
+  final String senderUid; // Added field for sender_uid
+  final String fullName;
   final String lastMessage;
   final String time;
+  final String chatid;
 
   ChatItem({
-    required this.name,
+    required this.senderUid, // Initialize senderUid
+    required this.fullName,
     required this.lastMessage,
     required this.time,
+    required this.chatid,
   });
 
   factory ChatItem.fromJson(Map<String, dynamic> json) {
     return ChatItem(
-      name: json['sender_uid'] == '' ? json['receiver_uid'] : json['sender_uid'], // Assuming sender_uid is used to display the name
+      senderUid: json['sender_uid'] ?? 'Unknown', // Include sender_uid
+      fullName: json['sender_name'] ?? 'Unknown', // Adjust based on the PHP response
       lastMessage: json['last_message'],
       time: json['last_message_time'],
+      chatid: json['chat_id'],
     );
   }
 }

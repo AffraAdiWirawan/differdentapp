@@ -14,9 +14,11 @@ import 'package:pkm_mobile/pages/setting.dart';
 import 'package:pkm_mobile/pages/edukasi.dart';
 import 'package:pkm_mobile/pages/rumahsakit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class BerandaMain extends StatefulWidget {
   const BerandaMain({super.key});
+
   @override
   State<BerandaMain> createState() => BerandaMainPage();
 }
@@ -24,11 +26,13 @@ class BerandaMain extends StatefulWidget {
 class BerandaMainPage extends State<BerandaMain> {
   final BottomNavController bottomNavController = Get.put(BottomNavController());
   Map<String, dynamic>? user;
+  List<dynamic> doctors = [];
 
   @override
   void initState() {
     super.initState();
     _loadUserData();
+    _fetchDoctors();
   }
 
   Future<void> _loadUserData() async {
@@ -42,6 +46,18 @@ class BerandaMainPage extends State<BerandaMain> {
     }
   }
 
+  Future<void> _fetchDoctors() async {
+    final response = await http.get(Uri.parse('http://api.differentdentalumy.com/getdokter.php?role=dokter'));
+
+    if (response.statusCode == 200) {
+      setState(() {
+        doctors = jsonDecode(response.body);
+      });
+    } else {
+      throw Exception('Failed to load doctors');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<Widget> items = [
@@ -49,10 +65,11 @@ class BerandaMainPage extends State<BerandaMain> {
       Image.asset(ImageConstant.motivasi2),
       Image.asset(ImageConstant.banner1),
     ];
+
     String username = user?['username'] ?? 'User';
 
     final CarouselOptions options = CarouselOptions(
-      height: 200.0,
+      height: 180.0,
       enlargeCenterPage: true,
       autoPlay: true,
       aspectRatio: 16 / 9,
@@ -112,42 +129,39 @@ class BerandaMainPage extends State<BerandaMain> {
                   onTap: () {
                     Get.to(Augmented());
                   },
-                  child: 
-                    SizedBox(
-                      width: 80,
-                      child: Column(
-                        children: [
-                          Image.asset(ImageConstant.iconar),
-                          const Text('Augmented', textAlign: TextAlign.center,)
-                        ],
-                      ),
+                  child: SizedBox(
+                    width: 80,
+                    child: Column(
+                      children: [
+                        Image.asset(ImageConstant.iconar),
+                        const Text('Augmented', textAlign: TextAlign.center,)
+                      ],
                     ),
+                  ),
                 ),
                 GestureDetector(
                   onTap: () {
                     Get.to(CalendarScreen());
                   },
-                  child: 
-                    SizedBox(
-                      width: 80,
-                      child: Column(
-                        children: [
-                          Image.asset(ImageConstant.iconkalender),
-                          const Text('Kalender', textAlign: TextAlign.center,)
-                        ],
-                      ),
+                  child: SizedBox(
+                    width: 80,
+                    child: Column(
+                      children: [
+                        Image.asset(ImageConstant.iconkalender),
+                        const Text('Kalender', textAlign: TextAlign.center,)
+                      ],
                     ),
+                  ),
                 ),
                 GestureDetector(
                   onTap: () {
                     Get.to(EdukasiScreen());
                   },
-                  child: 
-                  SizedBox(
+                  child: SizedBox(
                     width: 80,
                     child: Column(
                       children: [
-                      Image.asset(ImageConstant.iconedukasi),
+                        Image.asset(ImageConstant.iconedukasi),
                         const Text('Edukasi', textAlign: TextAlign.center,)
                       ],
                     ),
@@ -157,16 +171,15 @@ class BerandaMainPage extends State<BerandaMain> {
                   onTap: () {
                     Get.to(RumahsakitScreen());
                   },
-                  child: 
-                    SizedBox(
-                      width: 80,
-                      child: Column(
-                        children: [
-                          Image.asset(ImageConstant.iconrumahsakit),
-                          const Text('Rumah', textAlign: TextAlign.center,)
-                        ],
-                      ),
+                  child: SizedBox(
+                    width: 80,
+                    child: Column(
+                      children: [
+                        Image.asset(ImageConstant.iconrumahsakit),
+                        const Text('Rumah', textAlign: TextAlign.center,)
+                      ],
                     ),
+                  ),
                 ),
               ],
             ),
@@ -177,17 +190,18 @@ class BerandaMainPage extends State<BerandaMain> {
             child: Text(
               'Konsultasi Spesialis',
               style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              decoration: TextDecoration.underline,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                decoration: TextDecoration.underline,
+              ),
             ),
           ),
-        ),
-         Expanded(
+          Expanded(
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: 4,//Index
+              itemCount: doctors.length,
               itemBuilder: (context, index) {
+                final doctor = doctors[index];
                 return Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: Card(
@@ -196,34 +210,46 @@ class BerandaMainPage extends State<BerandaMain> {
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: SizedBox(
-                      width: 160, // Mengubah lebar card dokter
+                      width: 160, // Adjust width of doctor card
                       child: Padding(
-                        padding: const EdgeInsets.all(4.0),
+                        padding: const EdgeInsets.all(8.0),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            SizedBox(
-                              width: 40,
-                              height: 40,
-                              child: Image.asset(ImageConstant.usericon),
-                            ),
-                            SizedBox(),
+                            // Display doctor's photo from URL
+                            doctor['photo'] != null
+                                ? ClipRRect(
+                                  borderRadius: BorderRadius.circular(50.0), // Rounded corners
+                                  child: Image.network(
+                                    doctor['photo'],
+                                    width: 50,
+                                    height: 50,
+                                    fit: BoxFit.cover,
+                                  ),
+                                )
+                              : Icon(Icons.person, size: 80), // Placeholder icon
+                            SizedBox(height: 8.0),
                             Text(
-                              'Nama Dokter $index',
-                              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                              doctor['nama_lengkap'] ?? 'Nama Dokter',
+                              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
                               textAlign: TextAlign.center,
                             ),
-                            SizedBox(),
+                            SizedBox(height: 4.0),
                             Text(
-                              'Spesialis $index',
-                              style: const TextStyle(fontSize: 10),
+                              doctor['Spesialis'] ?? 'Spesialis',
+                              style: const TextStyle(fontSize: 8),
                               textAlign: TextAlign.center,
                             ),
-                            SizedBox(),
                             ElevatedButton(
                               onPressed: () {
                                 // Navigasi ke layar dokter
-                                Get.to(DoctorScreen());
+                                Get.to(DoctorScreen(
+                                  doctorName: doctor['nama_lengkap'] ?? 'Nama Dokter',
+                                  patients: doctor['jumlahpasien']?.toString() ?? 'N/A',
+                                  experience: doctor['experience']?.toString() ?? 'N/A',
+                                  description: doctor['deskripsi'] ?? 'N/A',
+                                  photoUrl: doctor['photo'] ?? '',
+                                )); // Adjust as needed
                               },
                               child: const Text('Chat Sekarang', style: TextStyle(fontSize: 10)),
                             ),
@@ -269,9 +295,6 @@ class BottomNavController extends GetxController {
         break;
       case 6:
         Get.to(() => RumahsakitScreen());
-        break;
-      case 7:
-        Get.to(() =>  DoctorScreen());
         break;
     }
   }

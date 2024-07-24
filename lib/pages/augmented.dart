@@ -8,7 +8,10 @@ class Augmented extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Augmented Reality'),
+        title: const Text('Augmented Reality', style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.blue,
+        centerTitle: true,
+        automaticallyImplyLeading: true,
       ),
       body: const ModelViewer(
         src: 'assets/ar/tooth.glb',

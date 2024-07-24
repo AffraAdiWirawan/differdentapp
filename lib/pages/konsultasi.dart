@@ -5,20 +5,43 @@ import 'package:get/get.dart';
 import 'package:pkm_mobile/pages/message.dart';
 import 'package:pkm_mobile/utils/app_export.dart';
 
-class DoctorScreen extends StatelessWidget { 
-  DoctorScreen({super.key});
-  GlobalKey<NavigatorState> navigatorKey = GlobalKey();
+class DoctorScreen extends StatelessWidget {
+  final String doctorName;
+  final String patients;
+  final String experience;
+  final String description;
+  final String photoUrl;
+
+  DoctorScreen({
+    Key? key,
+    required this.doctorName,
+    required this.patients,
+    required this.experience,
+    required this.description,
+    required this.photoUrl,
+  }) : super(key: key);
+
   @override
-  Widget build (BuildContext context) {
+  Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(title: const Text('Konsultasi Specialist'),),
+        appBar: AppBar(title: const Text('Konsultasi Specialist')),
         body: Align(
           alignment: Alignment.topCenter,
           child: Column(
             children: [
-              Image.asset(ImageConstant.usericon),
-              const Text('Nama Dokter'),
+              photoUrl != null ?
+               ClipRRect(
+                borderRadius: BorderRadius.circular(200.0), // Rounded corners
+                child: Image.network(
+                  photoUrl,
+                  width: 200,
+                  height: 200,
+                  fit: BoxFit.cover,
+                ),
+              )
+              : Icon(Icons.person, size: 80), // Placeholder icon
+              Text(doctorName),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
                 child: Row(
@@ -26,39 +49,40 @@ class DoctorScreen extends StatelessWidget {
                   children: [
                     Container(
                       width: 150,
-                      child: const Text('Patients'),
+                      child: Text('Patients: $patients'),
                     ),
-                    const SizedBox(
-                      width: 30,
-                    ),
+                    const SizedBox(width: 30),
                     Container(
                       width: 150,
-                      child: const Text('Experinece'),
-                    )
-                  ]
-                ),
-              ),
-              const SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text('Description', textAlign: TextAlign.left,),
-                    Text('Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna. Nunc viverra imperdiet enim. Fusce est. Vivamus a tellus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin pharetra nonummy pede. Mauris et orci. Aenean nec lorem. In porttitor. Donec laoreet nonummy augue. Suspendisse dui purus, scelerisque at, vulputate vitae, pretium mattis, nunc. Mauris eget neque at sem venenatis eleifend. Ut nonummy.')
+                      child: Text('Experience: $experience'),
+                    ),
                   ],
                 ),
               ),
+              Expanded(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text('Description:', textAlign: TextAlign.left),
+                      Text(description),
+                    ],
+                  ),
+                ),
+              ),
               ElevatedButton(
-               onPressed: () {
-                // Perform login action with _nummail and _pass
-                Get.to(MessageScreen());
-              },
+                onPressed: () {
+                  Get.to(() => MessageScreen());
+                },
                 child: const Text('Konsultasi'),
               ),
-            ]
+            ],
           ),
-        ) 
-      )
+        ),
+      ),
     );
   }
 }
+
+

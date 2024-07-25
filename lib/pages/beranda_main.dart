@@ -61,9 +61,9 @@ class BerandaMainPage extends State<BerandaMain> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> items = [
-      Image.asset(ImageConstant.motivasi1),
-      Image.asset(ImageConstant.motivasi2),
-      Image.asset(ImageConstant.banner1),
+      Image.asset(ImageConstant.banner2),
+      Image.asset(ImageConstant.banner3),
+      Image.asset(ImageConstant.banner4),
     ];
 
     String username = user?['username'] ?? 'User';

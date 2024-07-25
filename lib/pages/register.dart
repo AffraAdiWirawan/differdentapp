@@ -10,7 +10,7 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   final _formKey = GlobalKey<FormState>();
-  String? _NIK, _nama_lengkap, _email, _username, _password;
+  String? _NIK, _nama_lengkap, _email, _username, _password, _jenisabk, _namaanak;
   bool _passwordVisible = false;
 
   Future<void> _register() async {
@@ -23,6 +23,8 @@ class _RegisterState extends State<Register> {
         'email': _email!,
         'username': _username!,
         'password': _password!,
+        'jenisabk': _jenisabk!,
+        'namaanak': _namaanak!,
       });
 
       // Print the request body for debugging
@@ -175,6 +177,42 @@ class _RegisterState extends State<Register> {
                             },
                             onSaved: (value) {
                               _username = value;
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          child: TextFormField(
+                            decoration: const InputDecoration(
+                              labelText: 'Jenis ABK',
+                              border: OutlineInputBorder(),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Masukan Jenis ABK';
+                              }
+                              return null;
+                            },
+                            onSaved: (value) {
+                              _jenisabk = value;
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          child: TextFormField(
+                            decoration: const InputDecoration(
+                              labelText: 'Nama Anak',
+                              border: OutlineInputBorder(),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Masukan Nama Anak';
+                              }
+                              return null;
+                            },
+                            onSaved: (value) {
+                              _namaanak = value;
                             },
                           ),
                         ),

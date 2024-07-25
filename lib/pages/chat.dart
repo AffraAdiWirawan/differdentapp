@@ -43,7 +43,8 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
   
 
   Future<void> _fetchChatItems(String uid) async {
-    final response = await http.get(Uri.parse('https://api.differentdentalumy.com/getpesan.php?uid=$uid'));
+    String chatid = widget.chatroom;
+    final response = await http.get(Uri.parse('https://api.differentdentalumy.com/getdaftarpesanchatid.php?uid=$uid&chat_id=$chatid'));
 
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);

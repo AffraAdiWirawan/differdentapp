@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:pkm_mobile/pages/component/bottomnavbar%20.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -46,7 +45,6 @@ class _MessageScreenState extends State<MessageScreen> {
 
   Future<List<ChatItem>> _fetchChatItems(String uid) async {
     final response = await http.get(Uri.parse('https://api.differentdentalumy.com/pesan.php?uid=$uid'));
-    print(response.body);
 
     if (response.statusCode == 200) {
       List<dynamic> data = jsonDecode(response.body);
@@ -54,11 +52,8 @@ class _MessageScreenState extends State<MessageScreen> {
       List<ChatItem> chatItems = [];
       for (var item in data) {
         // Fetch sender name for each chat item
-        final senderResponse = await http.get(Uri.parse('https://api.differentdentalumy.com/getuser.php?uid=${item['uiddokter']}'));
+        final senderResponse = await http.get(Uri.parse('https://api.differentdentalumy.com/getuser.php?uid=${item['sender_uid']}'));
         String senderName = 'Unknown';
-
-        print(senderResponse.statusCode);
-        print(senderResponse.body);
 
         if (senderResponse.statusCode == 200) {
           var senderData = jsonDecode(senderResponse.body);
@@ -66,11 +61,11 @@ class _MessageScreenState extends State<MessageScreen> {
         }
 
         chatItems.add(ChatItem(
-          senderUid: item['uiddokter'].toString(),
+          senderUid: item['sender_uid'],
           fullName: senderName,
           lastMessage: item['last_message'],
           time: item['last_message_time'],
-          chatid: item['chat_id'].toString(),
+          chatid: item['chat_id'],
         ));
       }
       return chatItems;
@@ -78,64 +73,56 @@ class _MessageScreenState extends State<MessageScreen> {
       throw Exception('Failed to load chat items');
     }
   }
-
   Future<String> _getOrCreateChatRoom(String uidDokter, String uidUser) async {
-    print('Fetching or creating chat room...');
-    print(uidDokter);
-    print(uidUser);
+  final response = await http.get(Uri.parse('https://api.differentdentalumy.com/newchatroom.php?uid_dokter=$uidDokter&uid_user=$uidUser'));
 
-    // Ensure the inputs are converted to integers
-    final intUidDokter = int.tryParse(uidDokter);
-    final intUidUser = int.tryParse(uidUser);
-
-    if (intUidDokter == null || intUidUser == null) {
-      throw Exception('Invalid UID values');
-    }
-
-    final response = await http.get(Uri.parse('https://api.differentdentalumy.com/newchatroom.php?uid_dokter=$intUidDokter&uid_user=$intUidUser'));
-    print(response.statusCode);
-    print(response.body);
+  if (response.statusCode == 200) {
     final data = jsonDecode(response.body);
-    print('Chat room fetched/created successfully');
-    return data['chat_id'].toString();
+    return data['chat_id'];
+  } else {
+    throw Exception('Failed to get or create chat room');
   }
+}
 
-  void _showDoctors() {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return Container(
-          padding: EdgeInsets.all(16),
-          child: ListView.builder(
-            itemCount: doctors.length,
-            itemBuilder: (context, index) {
-              final doctor = doctors[index];
-              return ListTile(
-                title: Text(doctor['nama_lengkap'] ?? 'Unknown'),
-                subtitle: Text('Specialization: ${doctor['Spesialis'] ?? 'No specialization'}'),
-                onTap: () async {
-                  try {
-                    final chatId = await _getOrCreateChatRoom(doctor['uid'].toString(), user!['uid'].toString());
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ChatDetailScreen(pengirim: doctor['uid'].toString(), chatroom: chatId),
-                      ),
-                    );
-                  } catch (e) {
-                    print('Error: $e');
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Failed to create chat room')),
-                    );
-                  }
-                },
-              );
-            },
-          ),
-        );
-      },
-    );
-  }
+
+void _showDoctors() {
+  showModalBottomSheet(
+    context: context,
+    builder: (context) {
+      return Container(
+        padding: EdgeInsets.all(16),
+        child: ListView.builder(
+          itemCount: doctors.length,
+          itemBuilder: (context, index) {
+            final doctor = doctors[index];
+            return ListTile(
+              title: Text(doctor['nama_lengkap'] ?? 'Unknown'),
+              subtitle: Text('Specialization: ${doctor['Spesialis'] ?? 'No specialization'}'),
+              onTap: () async {
+                try {
+                  final chatId = await _getOrCreateChatRoom(doctor['uid'], user!['uid']);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ChatDetailScreen(pengirim: doctor['uid'], chatroom: chatId),
+                    ),
+                  );
+                } catch (e) {
+                  print('Error: $e');
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Failed to create chat room')),
+                  );
+                }
+              },
+            );
+          },
+        ),
+      );
+    },
+  );
+}
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -215,7 +202,7 @@ class ChatItem {
       fullName: json['sender_name'] ?? 'Unknown',
       lastMessage: json['last_message'],
       time: json['last_message_time'],
-      chatid: json['chat_id'].toString(),
+      chatid: json['chat_id'],
     );
   }
 }

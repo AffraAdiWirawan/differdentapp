@@ -8,7 +8,10 @@ class CalendarScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Calendar'), automaticallyImplyLeading: false,),
+      appBar: AppBar(
+        title: const Text('Calendar'),
+        automaticallyImplyLeading: false,
+      ),
       body: Center(
         child: Column(
           children: [
@@ -16,6 +19,11 @@ class CalendarScreen extends StatelessWidget {
               firstDay: DateTime.utc(2010, 10, 16),
               lastDay: DateTime.utc(2030, 3, 14),
               focusedDay: DateTime.now(),
+              calendarFormat: CalendarFormat.month,
+              onDaySelected: (selectedDay, focusedDay) {
+                // Handle day selection
+              },
+              // Optional: Customize your calendar here
             ),
             ElevatedButton(
               onPressed: () {

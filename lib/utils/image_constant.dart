@@ -21,4 +21,7 @@ class ImageConstant {
   static String konten1 = '$imagePath/konten1.png';
   static String konten2 = '$imagePath/konten2.png';
   static String konten3 = '$imagePath/konten3.png';
+  static String banner2 = '$imagePath/banner2.png';
+  static String banner3 = '$imagePath/banner3.png';
+  static String banner4 = '$imagePath/banner4.png';
 }

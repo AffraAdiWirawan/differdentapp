@@ -1,1 +1,2 @@
-const OPENAI_API_KEY = "sk-proj-LkcoHKUCJADyGcufAVYRT3BlbkFJEbMp4mrn4HYigZeRLQPR";
+// ignore: constant_identifier_names
+const String apiKey = 'AIzaSyDfjmSvom8myGKVvlN1Zti3-tAHM4QcR_A';

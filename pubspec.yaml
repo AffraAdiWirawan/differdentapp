@@ -54,6 +54,9 @@ dependencies:
   animate_do: ^3.0.2
   flutter_local_notifications: ^17.2.1+2
   timezone: ^0.9.4
+  google_generative_ai: ^0.4.3
+  flutter_markdown: ^0.7.3
+  image_picker: ^1.1.1
   
 dev_dependencies:
   flutter_test:

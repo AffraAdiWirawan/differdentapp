@@ -7,6 +7,8 @@ import 'package:pkm_mobile/pages/register.dart';
 import 'package:pkm_mobile/utils/app_export.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
+import 'package:pkm_mobile/pages/component/tutorial.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -19,6 +21,93 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   late String _username, _pass;
   bool _passwordVisible = false;
+  List<TargetFocus> targets1 = [];
+  GlobalKey reg = GlobalKey();
+  GlobalKey log = GlobalKey();
+  GlobalKey isidata = GlobalKey();
+  @override
+  void initState () {
+    Future.delayed(Duration(seconds: 1), () {
+      showTutorial();
+    });
+    super.initState();
+  }
+  void showTutorial() {
+    _initTarget();
+    TutorialCoachMark tutorial = TutorialCoachMark(
+      targets: targets1,
+      hideSkip: true,
+    )..show(context:context);
+  }
+  void _initTarget() {
+    targets1 = [
+      TargetFocus(
+        shape: ShapeLightFocus.RRect,
+        identify: "Register",
+        keyTarget: reg,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return CoachmarkDesc(
+                text: "Registrasi untuk memasuki aplikasi",
+                onNext: () {
+                  controller.next();
+                },
+                onSkip: () {
+                  controller.skip();
+                },
+              );
+            },
+          ),
+        ]
+      ),
+      TargetFocus(
+        identify: "isi",
+        shape: ShapeLightFocus.RRect,
+        keyTarget: isidata,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return CoachmarkDesc(
+                text: "Masukan Username dan Password anda",
+                onNext: () {
+                  controller.next();
+                },
+                onSkip: () {
+                  controller.skip();
+                },
+              );
+            },
+          ),
+        ],
+      ),
+      TargetFocus(
+        identify: "Button",
+        keyTarget: log,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return CoachmarkDesc(
+                text: "Klik Login setelah memasukan Username dan password",
+                onNext: () {
+                  controller.next();
+                },
+                onSkip: () {
+                  controller.skip();
+                },
+                isLast: true,
+              );
+            },
+          ),
+        ],
+      ),
+      
+    ];
+  }
+
 
   Future<void> _login() async {
     if (_formKey.currentState!.validate()) {
@@ -48,8 +137,10 @@ class _LoginPageState extends State<LoginPage> {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('user', jsonEncode(responseBody['user']));
 
-        // Navigate to BerandaMain on successful login
-        Get.to(const BerandaMain());
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => BerandaMain()),
+        );
       } else {
         print(23);
         // Show a SnackBar with the error message
@@ -110,6 +201,7 @@ class _LoginPageState extends State<LoginPage> {
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: Padding(
+                      key: isidata,
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
                         children: [
@@ -179,6 +271,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   ElevatedButton(
+                    key: log,
                     onPressed: () {
                       if (_formKey.currentState?.validate() ?? false) {
                         _formKey.currentState?.save();
@@ -196,6 +289,7 @@ class _LoginPageState extends State<LoginPage> {
                           style: CustomTextStyles.bodyMediumBlack900,
                         ),
                         GestureDetector(
+                          key: reg,
                           onTap: () {
                             Get.to(Register());
                           },
@@ -204,32 +298,6 @@ class _LoginPageState extends State<LoginPage> {
                             style: CustomTextStyles.bodyLargeSansationCyan400,
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20.0, // Adjust this as necessary
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Expanded(child: Divider()),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Text(
-                            "Atau Login Dengan",
-                            style: CustomTextStyles.bodyMediumBlack900Light_1,
-                          ),
-                        ),
-                        const Expanded(child: Divider()),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Image.asset(ImageConstant.logogoogle)
                       ],
                     ),
                   ),

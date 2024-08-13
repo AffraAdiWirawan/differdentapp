@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:pkm_mobile/pages/login_page.dart';
@@ -55,10 +56,7 @@ class _RegisterState extends State<Register> {
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop(); // Close the dialog
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
-                    );
+                    Get.to(LoginPage());
                   },
                   child: Text('Kembali ke Login'),
                 ),
@@ -93,7 +91,7 @@ class _RegisterState extends State<Register> {
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: SizedBox(
-                  width: 300,
+                  width: 250,
                   child: Form(
                     key: _formKey,
                     child: Column(
@@ -105,6 +103,11 @@ class _RegisterState extends State<Register> {
                             decoration: const InputDecoration(
                               labelText: 'NIK',
                               border: OutlineInputBorder(),
+                              contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+                              isDense: true,
+                              errorStyle: TextStyle(
+                                wordSpacing: 0.0,
+                              ),
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -126,6 +129,8 @@ class _RegisterState extends State<Register> {
                             decoration: const InputDecoration(
                               labelText: 'Nama Lengkap',
                               border: OutlineInputBorder(),
+                              contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+                              isDense: true,
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -147,6 +152,8 @@ class _RegisterState extends State<Register> {
                             decoration: const InputDecoration(
                               labelText: 'Email',
                               border: OutlineInputBorder(),
+                              contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+                              isDense: true,
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -168,6 +175,8 @@ class _RegisterState extends State<Register> {
                             decoration: const InputDecoration(
                               labelText: 'Username',
                               border: OutlineInputBorder(),
+                              contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+                              isDense: true,
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -186,6 +195,8 @@ class _RegisterState extends State<Register> {
                             decoration: const InputDecoration(
                               labelText: 'Jenis ABK',
                               border: OutlineInputBorder(),
+                              contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+                              isDense: true,
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -204,6 +215,8 @@ class _RegisterState extends State<Register> {
                             decoration: const InputDecoration(
                               labelText: 'Nama Anak',
                               border: OutlineInputBorder(),
+                              contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+                              isDense: true,
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -235,6 +248,8 @@ class _RegisterState extends State<Register> {
                                   });
                                 },
                               ),
+                              contentPadding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 12.0),
+                              isDense: true,
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -248,7 +263,7 @@ class _RegisterState extends State<Register> {
                           ),
                         ),
                         ElevatedButton(
-                          onPressed: _register, // Call _register method
+                          onPressed: _register,
                           child: const Text('Register'),
                         ),
                       ],

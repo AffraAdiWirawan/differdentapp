@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:pkm_mobile/pages/augmented.dart';
 import 'package:pkm_mobile/pages/component/bottomnavbar%20.dart';
 import 'package:pkm_mobile/pages/konsultasi.dart';
+import 'package:pkm_mobile/pages/profile.dart';
 import 'package:pkm_mobile/utils/app_export.dart';
 import 'package:pkm_mobile/utils/image_constant.dart';
 import 'package:pkm_mobile/pages/calender.dart';
@@ -15,6 +16,8 @@ import 'package:pkm_mobile/pages/edukasi.dart';
 import 'package:pkm_mobile/pages/rumahsakit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
+import 'package:pkm_mobile/pages/component/tutorial.dart';
 
 class BerandaMain extends StatefulWidget {
   const BerandaMain({super.key});
@@ -27,12 +30,137 @@ class BerandaMainPage extends State<BerandaMain> {
   final BottomNavController bottomNavController = Get.put(BottomNavController());
   Map<String, dynamic>? user;
   List<dynamic> doctors = [];
+  GlobalKey chatAI = GlobalKey();
+  GlobalKey aug = GlobalKey();
+  GlobalKey cal = GlobalKey();
+  GlobalKey edu = GlobalKey();
+  GlobalKey hos = GlobalKey();
+  GlobalKey chat = GlobalKey();
+  List<TargetFocus> targets1 = [];
 
   @override
   void initState() {
-    super.initState();
     _loadUserData();
     _fetchDoctors();
+    Future.delayed(Duration(seconds: 1), () {
+      showTutorial();
+    });
+    super.initState();
+  }
+  void showTutorial() {
+    _initTarget();
+    TutorialCoachMark tutorial = TutorialCoachMark(
+      targets: targets1,
+      hideSkip: true,
+    )..show(context:context);
+  }
+  void _initTarget() {
+    targets1 = [
+      TargetFocus(
+        identify: "Augmented",
+        shape: ShapeLightFocus.Circle,
+        keyTarget: aug,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return CoachmarkDesc(
+                text: "Augmented untuk melihat 3d Object",
+                onNext: () {
+                  controller.next();
+                },
+                onSkip: () {
+                  controller.skip();
+                },
+              );
+            },
+          ),
+        ],
+      ),
+      TargetFocus(
+        identify: "Calender",
+        shape: ShapeLightFocus.Circle,
+        keyTarget: cal,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return CoachmarkDesc(
+                text: "Calender, mencari dan mencatat tanggal",
+                onNext: () {
+                  controller.next();
+                },
+                onSkip: () {
+                  controller.skip();
+                },
+              );
+            },
+          ),
+        ],
+      ),
+      TargetFocus(
+        identify: "Edukasi",
+        shape: ShapeLightFocus.Circle,
+        keyTarget: edu,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return CoachmarkDesc(
+                text: "Edukasi, fitur untuk Belajar mengenai banyak hal",
+                onNext: () {
+                  controller.next();
+                },
+                onSkip: () {
+                  controller.skip();
+                },
+              );
+            },
+          ),
+        ],
+      ),
+      TargetFocus(
+        identify: "Hospital",
+        keyTarget: hos,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return CoachmarkDesc(
+                text: "Hospital, mengecek informasi mengenai rumah sakit",
+                onNext: () {
+                  controller.next();
+                },
+                onSkip: () {
+                  controller.skip();
+                },
+              );
+            },
+          ),
+        ],
+      ),
+      TargetFocus(
+        identify: "Chat",
+        keyTarget: chat,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return CoachmarkDesc(
+                text: "Chat untuk berkonsultasi dengan tenaga profesional",
+                onNext: () {
+                  controller.next();
+                },
+                onSkip: () {
+                  controller.skip();
+                },
+                isLast: true,
+              );
+            },
+          ),
+        ],
+      ),
+    ];
   }
 
   Future<void> _loadUserData() async {
@@ -102,8 +230,7 @@ class BerandaMainPage extends State<BerandaMain> {
             icon: const Icon(Icons.account_circle),
             tooltip: 'Show Snackbar',
             onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Pengaturan akun')));
+              bottomNavController.onItemTapped(4);
             },
           ),
         ],
@@ -130,6 +257,7 @@ class BerandaMainPage extends State<BerandaMain> {
                     Get.to(Augmented());
                   },
                   child: SizedBox(
+                    key: aug,
                     width: 80,
                     child: Column(
                       children: [
@@ -141,9 +269,10 @@ class BerandaMainPage extends State<BerandaMain> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Get.to(CalendarScreen());
+                    bottomNavController.onItemTapped(1);
                   },
                   child: SizedBox(
+                    key: cal,
                     width: 80,
                     child: Column(
                       children: [
@@ -158,6 +287,7 @@ class BerandaMainPage extends State<BerandaMain> {
                     Get.to(EdukasiScreen());
                   },
                   child: SizedBox(
+                    key: edu,
                     width: 80,
                     child: Column(
                       children: [
@@ -172,11 +302,12 @@ class BerandaMainPage extends State<BerandaMain> {
                     Get.to(RumahsakitScreen());
                   },
                   child: SizedBox(
+                    key: hos,
                     width: 80,
                     child: Column(
                       children: [
                         Image.asset(ImageConstant.iconrumahsakit),
-                        const Text('Rumah', textAlign: TextAlign.center,)
+                        const Text('Hospital', textAlign: TextAlign.center,)
                       ],
                     ),
                   ),
@@ -185,6 +316,7 @@ class BerandaMainPage extends State<BerandaMain> {
             ),
           ),
           Container(
+            key: chat,
             alignment: Alignment.centerLeft,
             padding: const EdgeInsets.all(2.0),
             child: Text(
@@ -197,6 +329,7 @@ class BerandaMainPage extends State<BerandaMain> {
             ),
           ),
           Expanded(
+
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: doctors.length,
@@ -264,7 +397,8 @@ class BerandaMainPage extends State<BerandaMain> {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavBar(),
+      bottomNavigationBar: 
+      BottomNavBar(),
     );
   }
 }
@@ -288,7 +422,7 @@ class BottomNavController extends GetxController {
         Get.to(() => MessageScreen());
         break;
       case 4:
-        Get.to(() => SettingsScreen());
+        Get.to(() => ProfilePage());
         break;
       case 5:
         Get.to(() => EdukasiScreen());
@@ -299,3 +433,4 @@ class BottomNavController extends GetxController {
     }
   }
 }
+

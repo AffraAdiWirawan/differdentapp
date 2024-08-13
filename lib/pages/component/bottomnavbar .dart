@@ -5,6 +5,7 @@ import 'package:pkm_mobile/utils/image_constant.dart';
 
 class BottomNavBar extends StatelessWidget {
   final BottomNavController bottomNavController = Get.put(BottomNavController());
+    GlobalKey chatAI = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +27,7 @@ class BottomNavBar extends StatelessWidget {
             backgroundColor: Colors.grey[300],
           ),
           BottomNavigationBarItem(
+            key: chatAI,
             label: 'ChatAI',
             icon: SizedBox(
               width: 30,
@@ -41,7 +43,7 @@ class BottomNavBar extends StatelessWidget {
           ),
           BottomNavigationBarItem(
             label: 'Settings',
-            icon: const Icon(Icons.settings),
+            icon: const Icon(Icons.person),
             backgroundColor: Colors.grey[300],
           ),
         ],

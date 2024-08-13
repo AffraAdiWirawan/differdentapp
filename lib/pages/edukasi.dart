@@ -1,40 +1,42 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pkm_mobile/pages/component/bottomnavbar%20.dart'; // Pastikan path import sesuai dengan struktur proyek Anda
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:http/http.dart' as http;
 
-void main() {
-  runApp(MyApp());
+class EdukasiScreen extends StatefulWidget {
+   @override
+  _EdukasiScreen createState() => _EdukasiScreen();
 }
+class _EdukasiScreen extends State<EdukasiScreen> {
+  List<dynamic> pdfModules = [];
 
-class MyApp extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: EdukasiScreen(),
-    );
+  void initState() {
+    super.initState();
+    _loadUserData();
   }
-}
 
-class EdukasiScreen extends StatelessWidget {
-  final List<Map<String, String>> pdfModules = [
-    {
-      'title': 'Modul Edukasi 1',
-      'description': 'Kesehatan Gigi Pada Anak Berkebutuhan Khusus.',
-      'pdfUrl': 'https://docs.google.com/document/d/10lTZrImjccSuF7YVaFkFTcxrTAUWlNKp/edit?usp=sharing&ouid=117605629388352350290&rtpof=true&sd=true',
-    },
-    {
-      'title': 'Modul Edukasi 2',
-      'description': 'Perawatan Gigi Anak Berkebutuhan Khusus.',
-      'pdfUrl': 'https://drive.google.com/file/d/1FDCT562RVfRuSUkIM8mlsuwAJQoEcotu/view?usp=sharing',
-    },
-    {
-      'title': 'Modul Edukasi 3',
-      'description': 'Mengenal Anak Berkebutuhan Khusus.',
-      'pdfUrl': 'https://drive.google.com/file/d/1i8NrT2_PiRUsbsMEN6aKF92FcTy_9Un4/view?usp=sharing',
-    },
-    // Tambahkan lebih banyak modul sesuai kebutuhan
-  ];
+  Future<void> _loadUserData() async {
+    final url = Uri.parse('https://api.differentdentalumy.com/edukasi.php');
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body) as List<dynamic>;
+
+      setState(() {
+        pdfModules = data;
+      });
+      print('Berhasil');
+      print(pdfModules);
+    } else {
+      // Handle error response
+      print('Failed to load PDF modules');
+    }
+  }
 
   final List<Map<String, String>> videoModules = [
     {
@@ -57,7 +59,6 @@ class EdukasiScreen extends StatelessWidget {
     },
     // Tambahkan lebih banyak video sesuai kebutuhan
   ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,16 +95,15 @@ class EdukasiScreen extends StatelessWidget {
               itemCount: pdfModules.length,
               itemBuilder: (context, index) {
                 return PdfModuleBox(
-                  title: pdfModules[index]['title']!,
-                  description: pdfModules[index]['description']!,
-                  pdfUrl: pdfModules[index]['pdfUrl']!,
+                  title: pdfModules[index]['judul'] ?? "Judul tidak ada",
+                  description: pdfModules[index]['deskripsi'] ??  "Deskripsi Tidak ada",
+                  pdfUrl: pdfModules[index]['pdfUrl'] ?? "Link tidak ada",
                 );
               },
             ),
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavBar(),
     );
   }
 }
@@ -192,6 +192,31 @@ class VideoBox extends StatelessWidget {
   }
 }
 
+class PDFopen extends StatefulWidget {
+  final String urlPDF;
+  final String judul;
+
+  const PDFopen({Key? key, required this.judul, required this.urlPDF}) : super(key: key);
+
+  @override
+  _PDFopenState createState() => _PDFopenState();
+}
+
+class _PDFopenState extends State<PDFopen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.judul, style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.blue,
+        centerTitle: true,
+        automaticallyImplyLeading: true,
+      ),
+      body: SfPdfViewer.network(widget.urlPDF),
+    );
+  }
+}
+
 class PdfModuleBox extends StatelessWidget {
   final String title;
   final String description;
@@ -200,11 +225,7 @@ class PdfModuleBox extends StatelessWidget {
   PdfModuleBox({required this.title, required this.description, required this.pdfUrl});
 
   void _launchURL() async {
-    if (await canLaunch(pdfUrl)) {
-      await launch(pdfUrl);
-    } else {
-      throw 'Could not launch $pdfUrl';
-    }
+    Get.to(PDFopen(judul: title, urlPDF: pdfUrl));
   }
 
   @override
@@ -212,7 +233,7 @@ class PdfModuleBox extends StatelessWidget {
     return GestureDetector(
       onTap: _launchURL,
       child: Container(
-        height: 100.0,
+        height: 80.0,
         margin: EdgeInsets.all(8.0),
         decoration: BoxDecoration(
           color: Color.fromARGB(255, 68, 152, 195), // Warna latar belakang

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pkm_mobile/consts.dart';
+import 'package:pkm_mobile/pages/component/bottomnavbar%20.dart';
 
 class  ChatAIScreen extends StatefulWidget {
   const ChatAIScreen({super.key});
@@ -52,6 +53,8 @@ class _MainPageState extends State<ChatAIScreen> {
               Text(answer),
             ],
           ),
-        ));
+        ),
+        bottomNavigationBar: BottomNavBar(),
+      );
   }
 }
